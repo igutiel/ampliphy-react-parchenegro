@@ -1,0 +1,75 @@
+body {
+	background: rgba(226,226,226,1);
+	background: -moz-linear-gradient(45deg, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 29%, rgba(209,209,209,1) 66%, rgba(254,254,254,1) 100%);
+	background: -webkit-gradient(left bottom, right top, color-stop(0%, rgba(226,226,226,1)), color-stop(29%, rgba(219,219,219,1)), color-stop(66%, rgba(209,209,209,1)), color-stop(100%, rgba(254,254,254,1)));
+	background: -webkit-linear-gradient(45deg, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 29%, rgba(209,209,209,1) 66%, rgba(254,254,254,1) 100%);
+	background: -o-linear-gradient(45deg, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 29%, rgba(209,209,209,1) 66%, rgba(254,254,254,1) 100%);
+	background: -ms-linear-gradient(45deg, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 29%, rgba(209,209,209,1) 66%, rgba(254,254,254,1) 100%);
+	background: linear-gradient(45deg, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 29%, rgba(209,209,209,1) 66%, rgba(254,254,254,1) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2e2e2', endColorstr='#fefefe', GradientType=1 );
+}
+div.head {
+	width: auto; /*or your image's width*/
+	height: auto; /*or your image's height*/
+	margin: 0;
+	padding: 0;
+	left: 280px;
+	position: absolute;
+}
+div.lateral {
+	position: absolute;
+	top: 180px;
+	left: 755px;
+	width: Auto;
+	height: Auto;
+}
+div.conexion {
+	position: absolute;
+	width: 250px;
+	height: 200px;
+	left: 485px;
+	top: 200px;
+	font-family: verdana;
+}
+h1 {
+	color: gray;
+	font-family: Cursive;
+}
+td.index {
+	color: green;
+}
+
+div.ingreso {
+	padding: 15px 15px 15px 15px;
+	background-color: white;
+	color: black;
+	position: Absolute;
+	left: 100px;
+	text-align: justify;
+	top: 490px;
+	margin-left: 100px;
+	width: 750px;
+	font-family: Time news Roman;
+	font-size: 12pt;
+	-webkit-box-shadow: 10px 10px 5px 0px rgba(173,170,173,1);
+	-moz-box-shadow: 10px 10px 5px 0px rgba(173,170,173,1);
+	box-shadow: 10px 10px 5px 0px rgba(173,170,173,1);
+}
+td.contrato {
+	font-family: Time News Roman;
+	font-size: 10px;
+}
+input.entrada {
+	font-family: Time News Roman;
+	font-size: 10px;
+}
+div.cuerpo {
+	position: Absolute;
+	top: 250px;
+	left: 45px;
+	-webkit-box-shadow: 10px 10px 5px 0px rgba(173,170,173,1);
+	-moz-box-shadow: 10px 10px 5px 0px rgba(173,170,173,1);
+	box-shadow: 10px 10px 5px 0px rgba(173,170,173,1);
+	background-color: white;
+	padding: 10px 10px 10px 10px;
+}

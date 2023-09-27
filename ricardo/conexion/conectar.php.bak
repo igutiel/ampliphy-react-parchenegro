@@ -1,0 +1,8 @@
+<?php
+//variables para la conexion
+$conection = mysql_connect("localhost","parchene_ctrato","DAwTWcnd82H3Rhm5") or die("no se puede conectar a  Server. (".mysql_error().")");
+//aqui selecciono la base Northwind que ya trae MS SQL v.8 como ejemplo
+@mysql_select_db("parchene_contratos",$conection);
+//tu consulta la asignas a un string $SQL
+
+?>
