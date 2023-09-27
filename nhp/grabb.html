@@ -1,0 +1,996 @@
+<html>
+<head>
+</style>
+  <style>
+    @font-face {
+      font-family: AtariFont;
+      src: url("../AtariSmall.ttf") format('truetype');
+    }
+
+    body {
+      font-family: AtariFont;
+    }
+  </style>
+</head>
+<body>
+<center><img src="atari000.png" /></center><br />
+<center><a href="nhp36.atr">Descargue aquÌ</a></center><br />
+0100     .OPT NO LIST<br />
+0110 ;<br />
+0120 ; GRABADOR SISTEMA NHP VER 3.6<br />
+0130 ;<br />
+0140 ; SAVE #D8:GRABB<br />
+0150 ;<br />
+0160 ;<br />
+0170 ; ASM,,#D8:GRABB.COM<br />
+0180 ;<br />
+0190 @LEN =  LEN+2<br />
+0200 @LBAF = LEN+4<br />
+0210 PPILA = LEN+5<br />
+0220 PCRSR = $CB<br />
+0230 ORG =   PCRSR<br />
+0240 SVMSC = $58<br />
+0250 POSXY = $54<br />
+0260 LENGHT = $4000<br />
+0270 BAFER = $4000<br />
+0280 FR0 =   $D4<br />
+0290 CIX =   $F2<br />
+0300 AFP =   $D800<br />
+0310 IFP =   $D9AA<br />
+0320 FPI =   $D9D2<br />
+0330 FASC =  $D8E6<br />
+0340 ZFR0 =  $DA44<br />
+0350 FDIV =  $DB28<br />
+0360 FMUL =  $DADB<br />
+0370 FMOVE = $DDB6<br />
+0380 INBUFF = $F3<br />
+0390 LBUFF = $0580<br />
+0400 LLOAD = PAG7-LOAD<br />
+0410 LVBLANK = LOADER-VBLANK<br />
+0420 LAUTO = PAG4-PAG7<br />
+0430 BL4 =   LAUTO/128<br />
+0440 LAST =  LAUTO-128*BL4<br />
+0450 ;<br />
+0460     *=  $2000<br />
+0470     .INCLUDE #D8:KEM2<br />
+0480 RY<br />
+0490     .BYTE 0,0<br />
+0500 LEN<br />
+0510     .BYTE 0,0,0,0,0,0<br />
+0520 CONT<br />
+0530     .BYTE 0,0<br />
+0540 STARTF<br />
+0550     .BYTE 0,0<br />
+0560 FINISH<br />
+0570     .BYTE 0,0<br />
+0580 @BL4<br />
+0590     .BYTE 0<br />
+0600 ?FILE<br />
+0610     .BYTE "D:"<br />
+0620 ??FILE<br />
+0630     .BYTE "                    "<br />
+0640 BBLQS<br />
+0650     .BYTE "000",$9B<br />
+0660 ALL<br />
+0670     .BYTE "D:*.*",$9B<br />
+0680 DNHP<br />
+0690     .BYTE $60,$00,$50,$80<br />
+0700     .WORD ??DIR<br />
+0710     .BYTE $35,$00,$00,$01,$00,$80<br />
+0720 BAKBYT<br />
+0730     .SBYTE "00000"<br />
+0740 BAKBLQ<br />
+0750     .SBYTE "000"<br />
+0760 TURBO<br />
+0770     .SBYTE "TURBO"<br />
+0780 FTURBO<br />
+0790     .BYTE $FF<br />
+0800 TON<br />
+0810     .SBYTE "ON "<br />
+0820 RESTORE<br />
+0830     LDY #19<br />
+0840 ?RESTORE<br />
+0850     LDA #$20<br />
+0860     STA ??FILE,Y<br />
+0870     LDA #$00<br />
+0880     STA NAME,Y<br />
+0890     STA FILE,Y<br />
+0900     DEY <br />
+0910     BPL ?RESTORE<br />
+0920     LDY #23<br />
+0930 ??RESTORE<br />
+0940     LDA #$00<br />
+0950     STA CRSR,Y<br />
+0960     DEY <br />
+0970     BPL ??RESTORE<br />
+<section name="sergio_marchant">
+0980     LDY #34<br />
+</section>
+0990 ???RESTORE<br />
+1000     LDA #$00<br />
+1010     STA FILE,Y<br />
+1020     DEY <br />
+1030     BPL ???RESTORE<br />
+1040     LDA #63<br />
+1050     STA CRSR<br />
+1060     STA FILE<br />
+1070     LDA #$10<br />
+1080     LDY #$04<br />
+1090 RESNUM<br />
+1100     STA BYTES,Y<br />
+1110     DEY <br />
+1120     BPL RESNUM<br />
+1130     STA BLOQUES<br />
+1140     STA BLOQUES+1<br />
+1150     STA BLOQUES+2<br />
+1160     LDA #$FF<br />
+1170     STA $D301<br />
+1180     RTS <br />
+1190 ASCINT<br />
+1200     CMP #32<br />
+1210     BCC ADD64<br />
+1220     CMP #96<br />
+1230     BCC SUB32<br />
+1240     CMP #128<br />
+1250     BCC REMAIN<br />
+1260     CMP #160<br />
+1270     BCC ADD64<br />
+1280     CMP #224<br />
+1290     BCC SUB32<br />
+1300     BCS REMAIN<br />
+1310 ADD64<br />
+1320     CLC <br />
+1330     ADC #64<br />
+1340     BCC REMAIN<br />
+1350 SUB32<br />
+1360     SEC <br />
+1370     SBC #32<br />
+1380 REMAIN<br />
+1390     RTS <br />
+1400 SETUR<br />
+1410     LDX #$04<br />
+1420 LOSTR<br />
+1430     LDA TURBO,X<br />
+1440     CMP CRSR,X<br />
+1450     BNE EXSTUR<br />
+1460     DEX <br />
+1470     BPL LOSTR<br />
+1480     LDA FTURBO<br />
+1490     EOR #$01<br />
+1500     STA FTURBO<br />
+1510     LDX #$02<br />
+1520 LOMVTR<br />
+1530     LDA TON,X<br />
+1540     PHA <br />
+1550     LDA TOF,X<br />
+1560     STA TON,X<br />
+1570     PLA <br />
+1580     STA TOF,X<br />
+1590     DEX <br />
+1600     BPL LOMVTR<br />
+1610     LDX #$00<br />
+1620     TXS <br />
+1630     JMP START<br />
+1640 EXSTUR<br />
+1650     RTS <br />
+1660 CLS<br />
+1670     LDX # <??DIR<br />
+1680     LDY # >??DIR<br />
+1690     STX PCRSR<br />
+1700     STY PCRSR+1<br />
+1710     LDY #$00<br />
+1720     LDX #$00<br />
+1730 ?CLS<br />
+1740     LDA #$00<br />
+1750     STA (PCRSR),Y<br />
+1760     INY <br />
+1770     BNE ??CLS<br />
+1780     INX <br />
+1790     INC PCRSR+1<br />
+1800 ??CLS<br />
+1810     CPY #104<br />
+1820     BNE ?CLS<br />
+1830     CPX #$01<br />
+1840     BNE ?CLS<br />
+1850     RTS <br />
+1860 OPEN<br />
+1870     LDX #$10<br />
+1880     LDA #$03<br />
+1890     STA $0342,X<br />
+1900     LDA # <?FILE<br />
+1910     STA $0344,X<br />
+1920     LDA # >?FILE<br />
+1930     STA $0345,X<br />
+1940     LDA #$04<br />
+1950     STA $034A,X<br />
+1960     LDA #$80<br />
+1970     STA $034B,X<br />
+1980     JSR $E456<br />
+1990     DEY <br />
+2000     BNE DIR<br />
+2010     RTS <br />
+2020 CLOSE<br />
+2030     LDX #$10<br />
+2040     LDA #$0C<br />
+2050     STA $0342,X<br />
+2060     JMP $E456<br />
+2070 DIR<br />
+2080     JSR CLOSE<br />
+2090     JSR CLS<br />
+2100     LDX # <?DIR<br />
+2110     LDY # >?DIR<br />
+2120     STX $0230<br />
+2130     STY $0231<br />
+2140     LDX # <??DIR<br />
+2150     LDY # >??DIR<br />
+2160     STX PCRSR<br />
+2170     STY PCRSR+1<br />
+2180     LDX #$10<br />
+2190     LDA #$03<br />
+2200     STA $0342,X<br />
+2210     LDA # <ALL<br />
+2220     STA $0344,X<br />
+2230     LDA # >ALL<br />
+2240     STA $0345,X<br />
+2250     LDA #$06<br />
+2260     STA $034A,X<br />
+2270     LDA #$00<br />
+2280     STA $034B,X<br />
+2290     JSR $E456<br />
+2300     LDA #$07<br />
+2310     STA $0342,X<br />
+2320     LDA #$00<br />
+2330     STA $0348,X<br />
+2340     STA $0349,X<br />
+2350     STA RY<br />
+2360     STA RY+1<br />
+2370 LEDIR<br />
+2380     JSR $E456<br />
+2390     BMI ?EXIT<br />
+2400     CMP #155<br />
+2410     BEQ EXIT<br />
+2420     JSR ASCINT<br />
+2430     LDY RY<br />
+2440     STA (PCRSR),Y<br />
+2450     INC RY<br />
+2460     BNE F0<br />
+2470     INC PCRSR+1<br />
+2480     INC RY+1<br />
+2490 F0<br />
+2500     LDY RY+1<br />
+2510     CPY #$01<br />
+2520     BNE F1<br />
+2530     LDY RY<br />
+2540     CPY #104<br />
+2550     BCC F1<br />
+2560     JSR PAUSE<br />
+2570     INC RY<br />
+2580 F1<br />
+2590     JMP LEDIR<br />
+2600 EXIT<br />
+2610     INC RY<br />
+2620     INC RY<br />
+2630     INC RY<br />
+2640     JMP LEDIR<br />
+2650 ?EXIT<br />
+2660     JSR CLOSE<br />
+2670     JSR PAUSE<br />
+2680     JSR CLS<br />
+2690     PLA <br />
+2700     PLA <br />
+2710     JMP START<br />
+2720 PAUSE<br />
+2730     LDA 53279<br />
+2740     CMP #$06<br />
+2750     BNE PAUSE<br />
+2760     JSR CLS<br />
+2770     LDA #$00<br />
+2780     STA RY<br />
+2790     STA RY+1<br />
+2800     LDA # <??DIR<br />
+2810     STA PCRSR<br />
+2820     LDA # >??DIR<br />
+2830     STA PCRSR+1<br />
+2840     LDX #$10<br />
+2850     RTS <br />
+2860 FLSH<br />
+2870     LDY RY<br />
+2880     LDA (PCRSR),Y<br />
+2890     EOR #63<br />
+2900     STA (PCRSR),Y<br />
+2910     LDA #$10<br />
+2920     STA $021A<br />
+2930     RTS <br />
+2940 OPENK<br />
+2950     LDA #255<br />
+2960     STA 764<br />
+2970     LDX #$10<br />
+2980     LDA #$03<br />
+2990     STA $0342,X<br />
+3000     STA $0345,X<br />
+3010     LDA #$26<br />
+3020     STA $0344,X<br />
+3030     LDA #$04<br />
+3040     STA $034A,X<br />
+3050     JSR $E456<br />
+3060     LDA #$07<br />
+3070     STA $0342,X<br />
+3080     LDA #$00<br />
+3090     STA $0348,X<br />
+3100     STA $0349,X<br />
+3110     STA RY<br />
+3120     RTS <br />
+3130 RUTLEE<br />
+3140     LDX # <FLSH<br />
+3150     LDY # >FLSH<br />
+3160     LDA #$10<br />
+3170     STX $0228<br />
+3180     STY $0229<br />
+3190     STA $021A<br />
+3200     JSR OPENK<br />
+3210 GETEC<br />
+3220     JSR $E456<br />
+3230     CMP #'~<br />
+3240     BNE C0<br />
+3250     LDY RY<br />
+3260     BEQ GETEC<br />
+3270     LDA #$00<br />
+3280     STA (PCRSR),Y<br />
+3290     LDA #63<br />
+3300     DEY <br />
+3310     STA (PCRSR),Y<br />
+3320     DEC RY<br />
+3330     JMP GETEC<br />
+3340 C0<br />
+3350     CMP #155<br />
+3360     BEQ C2<br />
+3370     JSR ASCINT<br />
+3380     LDY RY<br />
+3390     STA (PCRSR),Y<br />
+3400     CPY #20<br />
+3410     BEQ C1<br />
+3420     INC RY<br />
+3430 C1<br />
+3440     JMP GETEC<br />
+3450 C2<br />
+3460     JSR CLOSE<br />
+3470     LDA #$00<br />
+3480     STA $021A<br />
+3490     LDY RY<br />
+3500     STA (PCRSR),Y<br />
+3510     RTS <br />
+3520 FGET<br />
+3530     LDA #$DF<br />
+3540     STA $D301<br />
+3550     LDA #$00<br />
+3560     STA LEN<br />
+3570     STA LEN+1<br />
+3580 LOPFGET<br />
+3590     LDX #$10<br />
+3600     LDA #$07<br />
+3610     STA $0342,X<br />
+3620     LDA # <BAFER<br />
+3630     STA $0344,X<br />
+3640     LDA # >BAFER<br />
+3650     STA $0345,X<br />
+3660     LDA # <LENGHT<br />
+3670     STA $0348,X<br />
+3680     LDA # >LENGHT<br />
+3690     STA $0349,X<br />
+3700 ??FGET<br />
+3710     JSR $E456<br />
+3720     CLC <br />
+3730     LDA LEN<br />
+3740     ADC $0348,X<br />
+3750     STA LEN<br />
+3760     LDA LEN+1<br />
+3770     ADC $0349,X<br />
+3780     STA LEN+1<br />
+3790     CLC <br />
+3800     LDA $D301<br />
+3810     ADC #$04<br />
+3820     STA $D301<br />
+3830     LDA $0349,X<br />
+3840     CMP # >LENGHT<br />
+3850     BEQ LOPFGET<br />
+3860     CPY #136<br />
+3870     BEQ ?FGET<br />
+3880     JSR CLOSE<br />
+3890     JSR CLS<br />
+3900     LDX #$00<br />
+3910     TXS <br />
+3920     JMP START<br />
+3930 ?FGET<br />
+3940     JSR ZFR0<br />
+3950     LDA #252<br />
+3960     STA FR0<br />
+3970     JSR IFP<br />
+3980     JSR FMOVE<br />
+3990     LDA LEN<br />
+4000     STA FR0<br />
+4010     LDA LEN+1<br />
+4020     STA FR0+1<br />
+4030     JSR IFP<br />
+4040     JSR PONBYTES<br />
+4050     JSR FDIV<br />
+4060     JSR PONBLOQUES<br />
+4070     JSR FPI<br />
+4080     LDA FR0<br />
+4090     PHA <br />
+4100     DEC FR0<br />
+4110     JSR IFP<br />
+4120     JSR FMOVE<br />
+4130     LDA #252<br />
+4140     STA FR0<br />
+4150     LDA #$00<br />
+4160     STA FR0+1<br />
+4170     JSR IFP<br />
+4180     JSR FMUL<br />
+4190     JSR FPI<br />
+4200     SEC <br />
+4210     LDA LEN<br />
+4220     SBC FR0<br />
+4230     STA CONT+1<br />
+4240     INC CONT+1<br />
+4250     PLA <br />
+4260     STA CONT<br />
+4270     LDX #$10<br />
+4280     RTS <br />
+4290 PONBYTES<br />
+4300     JSR NBYTES<br />
+4310     STY RY<br />
+4320     LDY #$04<br />
+4330 ?PONBYTES<br />
+4340     LDA LBUFF,X<br />
+4350     AND #$5F<br />
+4360     STA BYTES,Y<br />
+4370     DEY <br />
+4380     DEX <br />
+4390     DEC RY<br />
+4400     BPL ?PONBYTES<br />
+4410     RTS <br />
+4420 PONBLOQUES<br />
+4430     JSR NBYTES<br />
+4440     STY RY<br />
+4450     LDY #$02<br />
+4460 ?PONBLOQUES<br />
+4470     LDA LBUFF,X<br />
+4480     AND #$5F<br />
+4490     STA BLOQUES,Y<br />
+4500     DEY <br />
+4510     DEX <br />
+4520     DEC RY<br />
+4530     BPL ?PONBLOQUES<br />
+4540     LDA BLOQUES+2<br />
+4550     CMP #$19<br />
+4560     BEQ ??PP0<br />
+4570     INC BLOQUES+2<br />
+4580 PP0<br />
+4590     LDY #$02<br />
+4600 MVBLQ<br />
+4610     LDA BLOQUES,Y<br />
+4620     ORA #$20<br />
+4630     STA BBLQS,Y<br />
+4640     DEY <br />
+4650     BPL MVBLQ<br />
+4660     LDX # <BBLQS<br />
+4670     LDY # >BBLQS<br />
+4680     LDA #$00<br />
+4690     STX INBUFF<br />
+4700     STY INBUFF+1<br />
+4710     STA CIX<br />
+4720     JMP AFP<br />
+4730 ??PP0<br />
+4740     LDA #$10<br />
+4750     STA BLOQUES+2<br />
+4760     LDA BLOQUES+1<br />
+4770     CMP #$19<br />
+4780     BEQ ???PP0<br />
+4790     INC BLOQUES+1<br />
+4800     JMP PP0<br />
+4810 ???PP0<br />
+4820     LDA #$10<br />
+4830     STA BLOQUES+1<br />
+4840     INC BLOQUES<br />
+4850     JMP PP0<br />
+4860 NBYTES<br />
+4870     JSR FASC<br />
+4880     LDX #$00<br />
+4890     LDY #$00<br />
+4900     LDA LBUFF<br />
+4910     CMP #'0<br />
+4920     BNE PL0<br />
+4930     INX <br />
+4940 PL0<br />
+4950     LDA LBUFF,X<br />
+4960     CMP #$80<br />
+4970     BCS PL1<br />
+4980     CMP #'.<br />
+4990     BEQ PL2<br />
+5000     INX <br />
+5010     INY <br />
+5020     JMP PL0<br />
+5030 PL1<br />
+5040     RTS <br />
+5050 PL2<br />
+5060     DEX <br />
+5070     LDA LBUFF,X<br />
+5080     ORA #$80<br />
+5090     STA LBUFF,X<br />
+5100     DEY <br />
+5110     RTS <br />
+5120 LOAD<br />
+5130     .BYTE "UU",162," öéDËÜ	Ëé–  L&Œ¸   ` R@ #   ÄppppppppppppGFÃppppppppppppBZÃA%Ã       prisma  "<br />
+5140     .BYTE "          #!2'!2! $%.42/ $% "<br />
+5150 BLQ<br />
+5160     .BYTE "000 ",34,",/15%3       2%42/#%$!  65%,4!3 9 02%3)/.% Ä≥¥°≤¥Ä "<br />
+5170     .BYTE 162,"Ωƒù≤Œ ˜≠0ç∑Œ≠1ç∏Œ≠/çπŒ≠Ùç∫Œ≠ÛçªŒ`",162,"Ω≤Œùƒ ˜≠∑Œç0≠∏Œç1≠πŒç/≠∫ŒçÙ≠ªŒçÛ"<br />
+5180     .BYTE "`",162,"%©Ãé0é‘ç1ç‘©:ç/ç ‘©‡çÙç	‘©çÛç‘",162,"Ω?Õùƒù– Ù©Z",162,"ÃçAÃéBÃ`(  F ©Ç",162,"Ã"<br />
+5190     .BYTE "çAÃéBÃ` DÕ©<ç”©˝ ∞Ú≠–…–˘ iÕLïÕ©4ç”",162,"éÆ–˚",162,"˝Ü≠“)ı¶–ıL˛ÃÃÃòY»`≠‘"<br />
+5200     .BYTE "–˚≠±ŒJ ™Ã ˛Ã",162,"ΩÃù  ˜ Y‰0ö≠Õ±ŒêíL•Õ≠ˇçÃ",162,"ΩqÃ…–©ùqÃ ÒﬁqÃ ‘ÃŒ±Œ† ÑMLä"<br />
+5210     .BYTE "Õ",162,"‰†_© \‰© ç–",162,"ù– ˙®",162,"ô »–˙ÓŒ Ù©",34,"ç/©<",162," ç”ö",162," †ÜÑl"<br />
+5220     .BYTE "‡¨Ã äÕçLŒ äÕçMŒ-LŒ…ˇÌ äÕçÃ äÕçÃ äÕçˇˇ≠LŒÕÃ–≠MŒÕÃÓLŒ–ÓMŒLHŒ≠‚„∏",162,"öåÃ ‘"<br />
+5230     .BYTE "Ã íŒ ™Ã iÕ¨Ã",162," öé‚é„L)Œ",162,"Ω†Œù  ˜L ©<ç” ©˛ç”`l‚"<br />
+5240 PFIN<br />
+5250     .BYTE 0<br />
+5260 PAG7<br />
+5270     .BYTE "UU ò k",162,"Ωáù¿ù–©ù–Ωîù –ä
+®πãÖÀπåmìÖÃ†@©ˇëÀà˘†©~ëÀà˘†8©~ëÀ»¿A–˜ ª",162,""<br />
+5280     .BYTE "Ω_ù  ˜ Y‰`` R@˝# É  Ä",162,"† é‘éìÑÀÜÃ",162,"òëÀ»–˚ÊÃ ˆ`ê¯‘BçOO pp•<",162,"¿† "<br />
+5290     .BYTE "x≠‘Hå‘ÜÃÑÀ±ÀŒ”ëÀÓ”»–ÛÊÃ•Ã…––È©ÿÖÃ–„Œ”",162,"†L©éÓåèÌçgÌ",162,"Ä†é£Îå®Î†©ÍôÖÌà˙†"<br />
+5300     .BYTE "7π˝ôÔÏà˜hç‘X`©}¶b©d}Óà˘m8Èdêç†",162,"©Omê» –ˆçÓåÔLñÌL=Ì"<br />
+5310 PAG4<br />
+5320     .BYTE "UU˛≠”)",162,"Ωpù  ˜ Y‰0L5©",34,"ç/ç ‘† πUëX»¿–ˆ©<ç”–˛Æ|¨}étåuÆ~¨éxåy"<br />
+5330     .BYTE "©`çL•≤≤Ø≤ÄÅÅÅ #!2'5% .5%6!-%.4%` R@ Ã# "<br />
+5340     .WORD LLOAD<br />
+5350     .BYTE " Ä "<br />
+5360     .WORD LVBLANK<br />
+5370 VBLANK<br />
+5380     .BYTE "UULXåWπ¿çi© ô¿ô–πeç “©Ôç“©çd",162,"†5© \‰ÓcL_‰Œd© ç “¨W≠iô¿ô–",162,"†ó©"<br />
+5390     .BYTE " \‰L_‰ ",162,"†b© \‰`© çb≠––	",162,"†x© \‰L_‰≠
+“)Æbùj© çcÓb",162,"†ó© \‰L_‰ÆcÏ"<br />
+5400     .BYTE "b–© çc",162,"†Í© \‰L_‰ΩjH",162,"†óéLåNh®L",162,"†ﬁéLåN© çd",162,"†5© \‰L_‰",162,""<br />
+5410     .BYTE "†x© \‰L_‰≠cÕb—≠ ”)…† …H»…C»…>»…9L_‰",162,"(†/é “å“©çd",162,"†8éLåN",162,""<br />
+5420     .BYTE "†5© \‰L_‰© ç“",162,"†b© \‰L_‰òÆc›j–¡H",162,"†ÍéLåNh®L   d<† "<br />
+5430 LOADER<br />
+5440     .BYTE "UU˙ ÄV‰",162,"/≠”ö) ç”Ω P]ßH ˆËÜAé/é ‘`DØ1yS≥Zˇ!UYYçÑS'ä8†åï“™…ù¯ÚyÙeW ÌÜ‚ 2PWñ;"<br />
+5450     .BYTE "†—^.                                         "<br />
+5460 OPENC<br />
+5470     LDA $D40B<br />
+5480     BNE OPENC<br />
+5490     LDA #$FF<br />
+5500     STA 764<br />
+5510 ?OPENC<br />
+5520     LDA 764<br />
+5530     CMP #$FF<br />
+5540     BEQ ?OPENC<br />
+5550     LDA #$FF<br />
+5560     STA 764<br />
+5570     JMP $FD40<br />
+5580 PONDATA<br />
+5590     LDX #$02<br />
+5600 ?PONDATA<br />
+5610     LDA BLOQUES,X<br />
+5620     STA BLQ,X<br />
+5630     DEX <br />
+5640     BPL ?PONDATA<br />
+5650     RTS <br />
+5660 INITSIOV<br />
+5670     LDY #$0B<br />
+5680 ?INITSIOV<br />
+5690     LDA DNHP,Y<br />
+5700     STA $0300,Y<br />
+5710     DEY <br />
+5720     BPL ?INITSIOV<br />
+5730     LDA #$00<br />
+5740     STA 77<br />
+5750     RTS <br />
+5760 AUTORUN<br />
+5770     JSR INITSIOV<br />
+5780     LDX # <LOADER<br />
+5790     LDY # >LOADER<br />
+5800     STX $0304<br />
+5810     STY $0305<br />
+5820     LDX #131<br />
+5830     LDY #$00<br />
+5840     STX $0308<br />
+5850     STY $0309<br />
+5860     JSR $E459<br />
+5870     JSR INITSIOV<br />
+5880     LDX # <PAG7<br />
+5890     LDY # >PAG7<br />
+5900     STX $0304<br />
+5910     STY $0305<br />
+5920     LDX # <LAUTO<br />
+5930     LDY # >LAUTO<br />
+5940     STX $0308<br />
+5950     STY $0309<br />
+5960     JSR $E459<br />
+5970     JMP PAUSA<br />
+5980 GAUTO<br />
+5990     LDA #$FF<br />
+6000     STA $D301<br />
+6010     JSR AUTORUN<br />
+6020     JSR INITSIOV<br />
+6030     LDX # <131<br />
+6040     LDY # >131<br />
+6050     STX $0308<br />
+6060     STY $0309<br />
+6070     LDX # <PAG4<br />
+6080     LDY # >PAG4<br />
+6090     STX $0304<br />
+6100     STY $0305<br />
+6110     JSR $E459<br />
+6120     LDA $D301<br />
+6130     AND FTURBO<br />
+6140     STA $D301<br />
+6150     JSR INITSIOV<br />
+6160     LDX # <LLOAD<br />
+6170     LDY # >LLOAD<br />
+6180     STX $0308<br />
+6190     STY $0309<br />
+6200     LDX # <LOAD<br />
+6210     LDY # >LOAD<br />
+6220     STX $0304<br />
+6230     STY $0305<br />
+6240     JSR $E459<br />
+6250     JSR INITSIOV<br />
+6260     LDX # <LVBLANK<br />
+6270     LDY # >LVBLANK<br />
+6280     STX $0308<br />
+6290     STY $0309<br />
+6300     LDX # <VBLANK<br />
+6310     LDY # >VBLANK<br />
+6320     STX $0304<br />
+6330     STY $0305<br />
+6340     JMP $E459<br />
+6350 PAUSA<br />
+6360     LDX #$20<br />
+6370     STX $021C<br />
+6380 ONROM<br />
+6390     LDX $021C<br />
+6400     BNE ONROM<br />
+6410     RTS <br />
+6420 REST<br />
+6430     LDY #$04<br />
+6440 ??REST<br />
+6450     LDA BYTES,Y<br />
+6460     STA BAKBYT,Y<br />
+6470     DEY <br />
+6480     BPL ??REST<br />
+6490     LDY #$02<br />
+6500 ???REST<br />
+6510     LDA BLOQUES,Y<br />
+6520     STA BAKBLQ,Y<br />
+6530     DEY <br />
+6540     BPL ???REST<br />
+6550     RTS <br />
+6560 ?REST<br />
+6570     LDY #$04<br />
+6580 ????REST<br />
+6590     LDA BAKBYT,Y<br />
+6600     STA BYTES,Y<br />
+6610     DEY <br />
+6620     BPL ????REST<br />
+6630     LDY #$02<br />
+6640 ?????REST<br />
+6650     LDA BAKBLQ,Y<br />
+6660     STA BLOQUES,Y<br />
+6670     DEY <br />
+6680     BPL ?????REST<br />
+6690     LDA CONT<br />
+6700     STA PFIN<br />
+6710     RTS <br />
+6720 NHPUT<br />
+6730     LDX LEN<br />
+6740     LDY LEN+1<br />
+6750     STX @LEN<br />
+6760     STY @LEN+1<br />
+6770     TSX <br />
+6780     STX PPILA<br />
+6790     LDA #$00<br />
+6800     STA @LBAF<br />
+6810     LDA #$55<br />
+6820     STA ??DIR<br />
+6830     STA ??DIR+1<br />
+6840     LDA #252<br />
+6850     STA ??DIR+255<br />
+6860     LDA FTURBO<br />
+6870     AND #$DF<br />
+6880     STA $D301<br />
+6890     LDX # <BAFER<br />
+6900     LDY # >BAFER<br />
+6910     STX M+1<br />
+6920     STY M+2<br />
+6930     LDX #$00<br />
+6940     LDY #$00<br />
+6950     STY $02E2<br />
+6960     JSR GRABACION<br />
+6970     JMP ?MVBF<br />
+6980 GRABACION<br />
+6990     LDA PFIN<br />
+7000     STA ??DIR+2<br />
+7010     RTS <br />
+7020 ?MVBF<br />
+7030     JSR GBYTE<br />
+7040     STA STARTF<br />
+7050     JSR GBYTE<br />
+7060     STA STARTF+1<br />
+7070     AND STARTF<br />
+7080     CMP #$FF<br />
+7090     BEQ ?MVBF<br />
+7100     JSR GBYTE<br />
+7110     STA FINISH<br />
+7120     JSR GBYTE<br />
+7130     STA FINISH+1<br />
+7140 NHLOP<br />
+7150     JSR GBYTE<br />
+7160     LDA STARTF<br />
+7170     CMP #$E3<br />
+7180     BNE ?NHLOP<br />
+7190     LDA STARTF+1<br />
+7200     CMP #$02<br />
+7210     BNE ?NHLOP<br />
+7220     STA $02E2<br />
+7230 ?NHLOP<br />
+7240     LDA STARTF<br />
+7250     CMP FINISH<br />
+7260     BNE NHCONT<br />
+7270     LDA STARTF+1<br />
+7280     CMP FINISH+1<br />
+7290     BEQ ?MVBF<br />
+7300 NHCONT<br />
+7310     INC STARTF<br />
+7320     BNE NOHI<br />
+7330     INC STARTF+1<br />
+7340 NOHI<br />
+7350     JMP NHLOP<br />
+7360 GBYTE<br />
+7370     LDA @LEN<br />
+7380     ORA @LEN+1<br />
+7390     BEQ EGRAB<br />
+7400     CPY #252    ;   ??DIR+255<br />
+7410     BEQ EGRAB<br />
+7420     INC @LBAF<br />
+7430     DEC @LEN<br />
+7440     LDA @LEN<br />
+7450     CMP #$FF<br />
+7460     BNE @NODLEN<br />
+7470     DEC @LEN+1<br />
+7480 @NODLEN<br />
+7490     TYA <br />
+7500 M<br />
+7510     EOR BAFER,X<br />
+7520     STA ??DIR+3,Y<br />
+7530     TYA <br />
+7540     EOR ??DIR+3,Y<br />
+7550     INY <br />
+7560     INX <br />
+7570     BNE EXNHPIT<br />
+7580     INC M+2<br />
+7590     BPL EXNHPIT<br />
+7600     PHA <br />
+7610     CLC <br />
+7620     LDA $D301<br />
+7630     ADC #$04<br />
+7640     STA $D301<br />
+7650     LDA # >BAFER<br />
+7660     STA M+2<br />
+7670     PLA <br />
+7680 EXNHPIT<br />
+7690     RTS <br />
+7700 EXNHPUT<br />
+7710     LDA #$80<br />
+7720     STA 77<br />
+7730     LDX PPILA<br />
+7740     TXS <br />
+7750     RTS <br />
+7760 EGRAB<br />
+7770     DEC PFIN<br />
+7780     LDA @LBAF<br />
+7790     STA ??DIR+255<br />
+7800     TXA <br />
+7810     PHA <br />
+7820     JSR INITSIOV<br />
+7830     JSR $E459<br />
+7840     LDA @LEN<br />
+7850     ORA @LEN+1<br />
+7860     BEQ EXNHPUT<br />
+7870     LDX #$02<br />
+7880 DECBL01<br />
+7890     LDA BLOQUES,X<br />
+7900     CMP #$10<br />
+7910     BNE DECBL02<br />
+7920     LDA #$19<br />
+7930     STA BLOQUES,X<br />
+7940     DEX <br />
+7950     BPL DECBL01<br />
+7960 DECBL02<br />
+7970     DEC BLOQUES,X<br />
+7980     PLA <br />
+7990     TAX <br />
+8000     LDA $02E2<br />
+8010     BNE SLOWB<br />
+8020 SIGUE<br />
+8030     JSR GRABACION<br />
+8040     LDY #$00<br />
+8050     STY @LBAF<br />
+8060     JMP GBYTE<br />
+8070 SLOWB<br />
+8080     TXA <br />
+8090     PHA <br />
+8100     LDX # <350<br />
+8110     LDY # >350<br />
+8120     STX $021C<br />
+8130     STY $021D<br />
+8140 IRG<br />
+8150     LDA $021D<br />
+8160     BNE IRG<br />
+8170     LDA $021C<br />
+8180     BNE IRG<br />
+8190     LDA #$00<br />
+8200     STA $02E2<br />
+8210     PLA <br />
+8220     TAX <br />
+8230     JMP SIGUE<br />
+8240 DLS<br />
+8250     .BYTE $70,$70,$70,$46<br />
+8260     .WORD SHOW<br />
+8270     .BYTE $70,$70,$02<br />
+8280     .BYTE "ppp",$02<br />
+8290     .BYTE "ppp",$06,"ppp",$02<br />
+8300     .BYTE "ppp",$06,"ppp",$02,$41<br />
+8310     .WORD DLS<br />
+8320 ; -------------------------<br />
+8330 ; DEFINICION DEL DISPLAY<br />
+8340 ; PARA DIRECTORIO<br />
+8350 ; -------------------------<br />
+8360 ?DIR<br />
+8370     .BYTE "pppppppp",$46<br />
+8380     .WORD ???DIR<br />
+8390     .BYTE $70,$02,$02,$02,$02<br />
+8400     .BYTE $02,$02,$02,$02,$02,$41<br />
+8410     .WORD ?DIR<br />
+8420 SHOW<br />
+8430     .SBYTE " NHP CON SIMON 1991 "<br />
+8440     .SBYTE "  †Œ»–†‘’“¬œ†”œÃœ†“œÕ†–œ“†–¡“√»≈†Œ≈«“œ† "<br />
+8450     .SBYTE "ŒœÕ¬“≈†√¡“¡‘’Ã¡∫"<br />
+8460 CRSR<br />
+8470     .SBYTE "_                       "<br />
+8480 NAME<br />
+8490     .SBYTE "                    "<br />
+8500     .SBYTE "∆…Ã≈∫"<br />
+8510 FILE<br />
+8520     .SBYTE "_                                  "<br />
+8530     .SBYTE "     TURBO "<br />
+8540 TOF<br />
+8550     .SBYTE "OFF      "<br />
+8560     .SBYTE "¬Ÿ‘≈”†Ã≈…ƒœ”∫ "<br />
+8570 BYTES<br />
+8580     .SBYTE "*****        ¬Ãœ—’≈”∫ "<br />
+8590 BLOQUES<br />
+8600     .SBYTE "*** "<br />
+8610 ???DIR<br />
+8620     .SBYTE "     DIRECTORIO     "<br />
+8630 ??DIR<br />
+8640     .SBYTE "                                        "<br />
+8650     .SBYTE "                                        "<br />
+8660     .SBYTE "                                        "<br />
+8670     .SBYTE "                                        "<br />
+8680     .SBYTE "                                        "<br />
+8690     .SBYTE "                                        "<br />
+8700     .SBYTE "                                        "<br />
+8710     .SBYTE "                                        "<br />
+8720     .SBYTE "                                        "<br />
+8730     .SBYTE "                                        "<br />
+8740 DOS<br />
+8750     JMP ($0C)<br />
+8760 START<br />
+8770     JSR DOS<br />
+8780     LDX # <DLS<br />
+8790     LDY # >DLS<br />
+8800     STX $0230<br />
+8810     STY $0231<br />
+8820     LDA #$90<br />
+8830     STA $02C8<br />
+8840     STA $02C6<br />
+8850     LDA #$CA<br />
+8860     STA $02C5<br />
+8870     JSR RESTORE<br />
+8880     LDX # <CRSR<br />
+8890     LDY # >CRSR<br />
+8900     STX PCRSR<br />
+8910     STY PCRSR+1<br />
+8920     JSR RUTLEE<br />
+8930     JSR SETUR<br />
+8940     TYA <br />
+8950     BEQ NOTITLE<br />
+8960     LSR A<br />
+8970     STA RY+1<br />
+8980     LDA #10<br />
+8990     SEC <br />
+9000     SBC RY+1<br />
+9010     STA RY+1<br />
+9020     LDX #$00<br />
+9030     LDY RY+1<br />
+9040 WRITE<br />
+9050     LDA CRSR,X<br />
+9060     STA NAME,Y<br />
+9070     INY <br />
+9080     INX <br />
+9090     CPX RY<br />
+9100     BNE WRITE<br />
+9110 NOTITLE<br />
+9120     LDX # <FILE<br />
+9130     LDY # >FILE<br />
+9140     STX PCRSR<br />
+9150     STY PCRSR+1<br />
+9160     JSR RUTLEE<br />
+9170     LDY #19<br />
+9180 CONV<br />
+9190     LDA FILE,Y<br />
+9200     BEQ ?REMAIN<br />
+9210     AND #$7F<br />
+9220     CMP #64<br />
+9230     BCC ADD32<br />
+9240     CMP #96<br />
+9250     BCC SUB64<br />
+9260     BCS ?REMAIN<br />
+9270 ADD32<br />
+9280     CLC <br />
+9290     ADC #32<br />
+9300     BCC OKLET<br />
+9310 SUB64<br />
+9320     SEC <br />
+9330     SBC #64<br />
+9340 ?REMAIN<br />
+9350     LDA #$9B<br />
+9360 OKLET<br />
+9370     STA ??FILE,Y<br />
+9380     DEY <br />
+9390     BPL CONV<br />
+9400     JSR OPEN<br />
+9410     JSR FGET<br />
+9420     JSR CLOSE<br />
+9430     JSR PONDATA<br />
+9440     JSR REST<br />
+9450 OTRACOPIA<br />
+9460     JSR ?REST<br />
+9470     JSR OPENC<br />
+9480     JSR GAUTO<br />
+9490     JSR NHPUT<br />
+9500     LDX #$3C<br />
+9510     LDA #$03<br />
+9520     STA 53775<br />
+9530     STX $D302<br />
+9540 WAIT<br />
+9550     LDA 53279<br />
+9560     CMP #$07<br />
+9570     BEQ WAIT<br />
+9580     CMP #$06<br />
+9590     BEQ OTRACOPIA<br />
+9600     CMP #$03<br />
+9610     BNE WAIT<br />
+9620     JMP START<br />
+9630 PIRATAS<br />
+9640     JSR CLOSE<br />
+9650     LDX # <OPENK<br />
+9660     LDY # >OPENK<br />
+9670 ;   JSR $5000<br />
+9680     JSR CLOSE<br />
+9690     JSR KEM<br />
+9700     LDX #$00<br />
+9710     STX 580<br />
+9720     DEX <br />
+9730     STX $08<br />
+9740     LDX # <START<br />
+9750     LDY # >START<br />
+9760     LDA #$03<br />
+9770     STX $02<br />
+9780     STY $03<br />
+9790     STA $09<br />
+9800     JMP START<br />
+9810     *=  $02E0<br />
+9820     .WORD PIRATAS<br />
+</body><br />
+</html><br />
